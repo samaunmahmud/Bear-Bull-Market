@@ -1,8 +1,7 @@
 package org.alphaspring.store.controller;
 
-
 import org.alphaspring.store.entity.Customer;
-import org.alphaspring.store.repository.CustomerRepository;
+import org.alphaspring.store.service.CustomerService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,51 +10,37 @@ import java.util.List;
 @RequestMapping("/api/customers")
 public class CustomerController {
 
-    private final CustomerRepository customerRepository;
+    private final CustomerService customerService;
 
-    public CustomerController(CustomerRepository customerRepository){
-        this.customerRepository=customerRepository;
+    // Injecting the Service instead of the Repository
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
     }
 
     @GetMapping
-    public List<Customer> getAllCustomers(){
-        return customerRepository.findAll();
-
+    public List<Customer> getAllCustomers() {
+        return customerService.getAllCustomers();
     }
 
     @GetMapping("/{id}")
-    public Customer getCustomerById(@PathVariable Long id){
-        return customerRepository.findById(id).orElse(null);
+    public Customer getCustomerById(@PathVariable Long id) {
+        return customerService.getCustomerById(id);
     }
 
     @PostMapping
-    public Customer saveCustomer(@RequestBody Customer customer){
-        return customerRepository.save(customer);
+    public Customer createCustomer(@RequestBody Customer customer) {
+        return customerService.createCustomer(customer);
     }
 
-
-    @DeleteMapping("/{id}")
-    public void deleteCustomer(@PathVariable Long id){
-        customerRepository.deleteById(id);
-    }
-
-
-    // PUT: Update an existing customer
     @PutMapping("/{id}")
     public Customer updateCustomer(@PathVariable Long id, @RequestBody Customer updatedCustomer) {
-        return customerRepository.findById(id)
-                .map(existingCustomer -> {
-                    existingCustomer.setName(updatedCustomer.getName());
-                    existingCustomer.setEmail(updatedCustomer.getEmail());
-                    existingCustomer.setPhone(updatedCustomer.getPhone());
-                    return customerRepository.save(existingCustomer);
-                })
-                .orElse(null);
+        return customerService.updateCustomer(id, updatedCustomer);
     }
 
-
-
-
+    @DeleteMapping("/{id}")
+    public void deleteCustomer(@PathVariable Long id) {
+        customerService.deleteCustomer(id);
+    }
 
 
 }
