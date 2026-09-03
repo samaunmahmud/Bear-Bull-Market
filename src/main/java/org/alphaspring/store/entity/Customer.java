@@ -1,7 +1,11 @@
 package org.alphaspring.store.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "customers")
@@ -39,6 +43,21 @@ public class Customer {
 
     public String getPhone(){return phone;}
     public void setPhone(String phone){this.phone=phone;}
+
+
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("cutomer")
+    private List<Order> orders = new ArrayList<>();
+
+
+    public List<Order> getOrders(){
+        return orders;
+    }
+    public void setOrders(List<Order> orders){
+        this.orders=orders;
+    }
+
 
 
 
