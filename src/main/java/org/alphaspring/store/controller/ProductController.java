@@ -3,6 +3,7 @@ package org.alphaspring.store.controller;
 
 import org.alphaspring.store.entity.Product;
 import org.alphaspring.store.repository.ProductRepository;
+import org.alphaspring.store.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,48 +12,39 @@ import java.util.List;
 @RequestMapping("/api/products")
 public class ProductController {
 
-    private final ProductRepository productRepository;
+    private final ProductService productService;
 
-    public ProductController(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
 
     }
 
     @GetMapping
     public List<Product> getProducts(){
-        return productRepository.findAll();
+        return productService.getAllProducts();
     }
 
 
     @PostMapping
     public Product createProduct(@RequestBody Product product){
-        return productRepository.save(product);
+        return productService.createProduct(product);
     }
 
     @GetMapping("/{id}")
     public Product getProductById(@PathVariable Long id){
-        return productRepository.findById(id).orElse(null);
+        return productService.getProductById(id);
     }
 
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable Long id){
 
-        productRepository.deleteById(id);
+        productService.deleteProduct(id);
     }
     
 
     @PutMapping("/{id}")
     public Product updateProduct(@PathVariable Long id, @RequestBody Product updatedProduct){
-        return productRepository.findById(id).map(product -> {
-            product.setName(updatedProduct.getName());
-            product.setPrice(updatedProduct.getPrice());
-            product.setStock(updatedProduct.getStock());
-            return productRepository.save(product);
-
-        }).orElseGet(()->{
-            return null;
-
-        });
+        return productService.updateProduct(id, updatedProduct);
     }
 
 
