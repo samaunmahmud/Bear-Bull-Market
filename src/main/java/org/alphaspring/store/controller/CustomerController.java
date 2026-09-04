@@ -1,5 +1,6 @@
 package org.alphaspring.store.controller;
 
+import jakarta.validation.Valid;
 import org.alphaspring.store.entity.Customer;
 import org.alphaspring.store.service.CustomerService;
 import org.springframework.web.bind.annotation.*;
@@ -28,12 +29,12 @@ public class CustomerController {
     }
 
     @PostMapping
-    public Customer createCustomer(@RequestBody Customer customer) {
+    public Customer createCustomer(@Valid @RequestBody Customer customer) {
         return customerService.createCustomer(customer);
     }
 
     @PutMapping("/{id}")
-    public Customer updateCustomer(@PathVariable Long id, @RequestBody Customer updatedCustomer) {
+    public Customer updateCustomer(@PathVariable Long id, @Valid @RequestBody Customer updatedCustomer) {
         return customerService.updateCustomer(id, updatedCustomer);
     }
 

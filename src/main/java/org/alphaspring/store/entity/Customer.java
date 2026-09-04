@@ -8,6 +8,9 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 @Entity
 @Table(name = "customers")
 public class Customer {
@@ -16,7 +19,11 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Name cannot be blank")
     private String name;
+
+    @Email(message ="Email should be valid")
+    @NotBlank(message = "Email cannot be blank")
     private String email;
     private String phone;
 
