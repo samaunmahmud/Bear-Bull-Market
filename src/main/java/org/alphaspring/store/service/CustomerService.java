@@ -1,5 +1,7 @@
 package org.alphaspring.store.service;
 
+import org.alphaspring.store.dto.CustomerRequestDTO;
+import org.alphaspring.store.dto.CustomerResponseDTO;
 import org.alphaspring.store.entity.Customer;
 import org.alphaspring.store.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
@@ -57,5 +59,21 @@ public class CustomerService {
         cutomer.setPhone(dto.getPhone());
 
         return customerRepository.save(cutomer);
+    }
+
+
+    // Helper method to map Entity -> Response DTO
+    private CustomerResponseDTO mapToRespnseDTO(Customer customer) {
+        return new CustomerResponseDTO(customer.getId(), customer.getName(), customer.getEmail(), customer.getPhone());
+    }
+
+    public CustomerResponseDTO createCustomerFromDTO(CustomerRequestDTO dto){
+        Customer customer = new Customer();
+        customer.setName(dto.getName());
+        customer.setEmail(dto.getEmail());
+        customer.setPhone(dto.getPhone());
+        Customer savedCustomer = customerRepository.save(customer);
+        return mapToRespnseDTO(savedCustomer);
+
     }
 }
