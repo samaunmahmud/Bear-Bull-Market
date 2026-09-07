@@ -3,6 +3,8 @@ package org.alphaspring.store.controller;
 import jakarta.validation.Valid;
 import org.alphaspring.store.entity.Customer;
 import org.alphaspring.store.service.CustomerService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,8 +31,9 @@ public class CustomerController {
     }
 
     @PostMapping
-    public Customer createCustomer(@Valid @RequestBody Customer customer) {
-        return customerService.createCustomer(customer);
+    public ResponseEntity<Customer> createCustomer(@Valid @RequestBody org.alphaspring.store.dto.CustomerRequestDTO requestDTO) {
+        Customer saveCustomer = customerService.createCustomerFromDto(requestDTO);
+        return new ResponseEntity<>(saveCustomer, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

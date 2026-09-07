@@ -47,4 +47,15 @@ public class CustomerService {
                 })
                 .orElse(null);
     }
+
+
+    public Customer createCustomerFromDto(org.alphaspring.store.dto.CustomerRequestDTO dto) {
+        Customer cutomer = new Customer();
+        cutomer.setName(dto.getName());
+
+        cutomer.setEmail(dto.getEmail());
+        cutomer.setPhone(dto.getPhone());
+
+        return customerRepository.save(cutomer);
+    }
 }
