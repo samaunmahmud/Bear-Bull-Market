@@ -29,7 +29,7 @@ public class UserDetailsConfig {
         UserDetails adminUser = User.builder()
                 .username("admin")
                 .password(passwordEncoder.encode("adminpass"))
-                .roles("USER")
+                .roles("ADMIN")
                 .build();
 
 
