@@ -1,11 +1,9 @@
 package org.alphaspring.store.repository;
 
-import org.alphaspring.store.entity.Customer;
+import org.alphaspring.store.entity.OrderItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-
-
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
+public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 }

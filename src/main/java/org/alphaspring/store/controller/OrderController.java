@@ -1,8 +1,13 @@
 package org.alphaspring.store.controller;
 
 
+
+
 import org.alphaspring.store.entity.Order;
 import org.alphaspring.store.service.OrderService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,40 +16,25 @@ import java.util.List;
 @RequestMapping("/api/orders")
 public class OrderController {
 
-
     private final OrderService orderService;
 
-    public OrderController(OrderService orderService){
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
 
-
-
-@GetMapping
-    public List<Order> getAllOders(){
-        return orderService.getAllOrders();
+    // 1. Checkout the current user's cart
+    @PostMapping("/checkout")
+    public ResponseEntity<Order> checkout(Authentication authentication) {
+        String username = authentication.getName();
+        Order order = orderService.checkout(username);
+        return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 
-
-
-    @PostMapping("/customer/{customerId}")
-    public Order CreateOrder(@PathVariable Long customerId, @RequestBody Order order){
-        return orderService.createOrder(customerId, order);
+    // 2. Get all orders for the authenticated user
+    @GetMapping
+    public ResponseEntity<List<Order>> getUserOrders(Authentication authentication) {
+        String username = authentication.getName();
+        List<Order> orders = orderService.getOrdersByUsername(username);
+        return ResponseEntity.ok(orders);
     }
-
-
-
-
-    @GetMapping("/customer/{customerId}")
-    public List<Order> getOrdersByCustomerId(@PathVariable Long customerId){
-        return orderService.getOrdersByCustomerId(customerId);
-    }
-
-
-
-
-
-
-
-
 }
